@@ -3,7 +3,7 @@
 This library enables us to create a snapshot of the values which UserDefaults manages.  
 The snapshot means an immutable data model, that could be super effective to embed into the state of state-management.
 
-## Overview
+# Overview
 
 **Creates a schema of the snapshot from UserDefaults**
 
@@ -32,14 +32,14 @@ And we can create multiple schemas for each use-case.
 
 <img width=400px src="https://user-images.githubusercontent.com/1888355/103155348-6a81bb00-47e2-11eb-9925-8002ecba0dd0.png" />
 
-**Creates a persistent-store**
+## Creates a persistent-store
 
 ```swift
 let userDefaults = UserDefaults.init("your_userdefaults")!
 let persistentStore = UserDefaultsPersistentStore<MyDefaults>(userDefaults: userDefaults)
 ```
 
-**Writing the value over `UserDefaultsPersistentStore`**
+## Writing the value over `UserDefaultsPersistentStore`
 
 Thanks to creating a schema, we can modify the value with type-safely.  
 
@@ -51,7 +51,7 @@ persistentStore.write { d in
 XCTAssertEqual(userDefaults.string(forKey: "name"), "john") // ✅
 ```
 
-**Reading the value from persitent-store**
+## Reading the value from persitent-store
 
 Using a snapshot to read the value which UserDefaults manages.  
 And the snapshot reads the backing dictionary represented by UserDefaults creates.
@@ -64,7 +64,7 @@ let snaphot: UserDefaultsSnapshot<MyDefaults> = persistentStore.makeSnapshot()
 XCTAssertEqual(store.makeSnapshot().name, "John") // ✅
 ```
 
-**Subscribing the snapshot each UserDefaults updates**
+## Subscribing the snapshot each UserDefaults updates
 
 `UserDefaultsPersistentStore` publishes new snapshot each receiving the notification that indicates UserDefaults changed.  
 With this, it provides `sinkSnapshot` method.
@@ -75,7 +75,7 @@ let token = store.sinkSnapshot { snapshot in
 }
 ```
 
-**Integrating with Verge**
+## Integrating with Verge
 
 A snapshot is a reference type, but it's an immutable data model.  
 It can be embedded in the value type such as a state of something like a store in state-management.
@@ -114,7 +114,7 @@ store.sinkState { state in
 
 ```
 
-## Installations
+# Installations
 
 Import a module with following installation methods.
 
@@ -143,10 +143,10 @@ dependencies: [
 ]
 ```
 
-## Author
+# Author
 
 [🇯🇵 Muukii (Hiroshi Kimura)](https://github.com/muukii)
 
-## License
+# License
 
 UserDefaultsSnapshot is released under the MIT license.
