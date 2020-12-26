@@ -7,6 +7,9 @@ The snapshot means an immutable data model, that could be super effective to emb
 
 **Creates a schema of the snapshot from UserDefaults**
 
+This object is just a schema that projects the keys which the UserDefaults manages.  
+So there are no namespaces, please carefully on naming the key.
+
 ```swift
 final class MyDefaults: UserDefaultsObject {
   @Property(key: "count") var count = 0
@@ -14,26 +17,49 @@ final class MyDefaults: UserDefaultsObject {
 }
 ```
 
-**Reading and Writing the value over `UserDefaultsPersistentStore`**
+### Attributes
+
+* `Property` - A non optional value property, returns the initialized value if UserDefautls returns nil.
+* `OptionalProperty` - A optional value property
+
+<img width=400px src="https://user-images.githubusercontent.com/1888355/103155348-6a81bb00-47e2-11eb-9925-8002ecba0dd0.png" />
+
+**Creates a persistent-store**
 
 ```swift
 let userDefaults = UserDefaults.init("your_userdefaults")!
-
 let persistentStore = UserDefaultsPersistentStore<MyDefaults>(userDefaults: userDefaults)
+```
 
-// Writing
+**Writing the value over `UserDefaultsPersistentStore`**
+
+Thanks to creating a schema, we can modify the value with type-safely.  
+
+```swift
 persistentStore.write { d in
   d.name = "John"
 }
 
-// Reading
-let snaphot: UserDefaultsSnapshot<MyDefaults> = persistentStore.makeSnapshot()
-
-XCTAssertEqual(store.makeSnapshot().name, "John") // ✅
 XCTAssertEqual(userDefaults.string(forKey: "name"), "john") // ✅
 ```
 
+**Reading the value from persitent-store**
+
+Using a snapshot to read the value which UserDefaults manages.  
+And the snapshot reads the backing dictionary represented by UserDefaults creates.
+
+Same as writing, thanks to creating a schema, we can read the value with type-safely.  
+
+```swift
+let snaphot: UserDefaultsSnapshot<MyDefaults> = persistentStore.makeSnapshot()
+
+XCTAssertEqual(store.makeSnapshot().name, "John") // ✅
+```
+
 **Subscribing the snapshot each UserDefaults updates**
+
+`UserDefaultsPersistentStore` publishes new snapshot each receiving the notification that indicates UserDefaults changed.  
+With this, it provides `sinkSnapshot` method.
 
 ```swift
 let token = store.sinkSnapshot { snapshot in
@@ -42,6 +68,10 @@ let token = store.sinkSnapshot { snapshot in
 ```
 
 **Integrating with Verge**
+
+A snapshot is a reference type, but it's an immutable data model.  
+It can be embedded in the value type such as a state of something like a store in state-management.
+
 ```swift
 struct MyState {
   var defaults: UserDefaultsSnapshot<MyDefaults>
