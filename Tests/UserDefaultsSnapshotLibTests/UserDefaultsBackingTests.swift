@@ -39,12 +39,14 @@ final class UserDefaultsBackingTests: XCTestCase {
       d.name = "muukii"
     }
 
+    XCTAssertEqual(store.makeSnapshot().name, "muukii")
     XCTAssertEqual(userDefaults.string(forKey: "b"), "muukii")
 
     store.write { d in
       d.name = nil
     }
 
+    XCTAssertEqual(store.makeSnapshot().name, nil)
     XCTAssertEqual(userDefaults.string(forKey: "b"), nil)
 
     do {
@@ -56,6 +58,7 @@ final class UserDefaultsBackingTests: XCTestCase {
       print(error)
     }
 
+    XCTAssertEqual(store.makeSnapshot().name, nil)
     XCTAssertEqual(userDefaults.string(forKey: "b"), nil)
   }
 
