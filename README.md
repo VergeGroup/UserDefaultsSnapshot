@@ -5,7 +5,7 @@ The snapshot means an immutable data model, that could be super effective to emb
 
 <p>
 <img alt="swift5.3" src="https://img.shields.io/badge/swift-5.3-ED523F.svg?style=flat"/>
-<img alt="Tests" src="https://github.com/VergeGroup/UserDefaultsSnapshot/workflows/Tests/badge.svg"/>
+<img alt="Tests" src="https://github.com/VergeGroup/UserDefaultsSnapshot/workflows/Swift/badge.svg"/>
 <img alt="cocoapods" src="https://img.shields.io/cocoapods/v/UserDefaultsSnapshot" />
 </p>
 
