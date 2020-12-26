@@ -17,6 +17,14 @@ final class MyDefaults: UserDefaultsObject {
 }
 ```
 
+> 💎
+As mention that above, this object is just a schema like a proxy to access UserDefaults (technically UserDefaults dictionary represented)  
+The specified key would be used to read and write directly.  
+This means we can start and stop using this library anytime!  
+And no needs to projects all of the keys on UserDefaults.  
+We only project the keys which we want to put on the snapshot.  
+And we can create multiple schemas for each use-case.
+
 ### Attributes
 
 * `Property` - A non optional value property, returns the initialized value if UserDefautls returns nil.
