@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name = "UserDefaultsSnapshotLib"
 
-  s.version = "1.0.0"
+  s.version = "1.1.0"
   s.summary = "A library that provides a snapshot of the UserDefaults for the state-management."
   s.description = <<-DESC
 This library enables us to create a snapshot of the values which UserDefaults manages.
