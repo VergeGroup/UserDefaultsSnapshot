@@ -11,7 +11,7 @@
 import Foundation
 
 @dynamicMemberLookup
-public final class UserDefaultsSnapshot<Schema: UserDefaultsObject> {
+public final class UserDefaultsSnapshot<Storage: UserDefaultsObject>: Hashable {
 
   public static func == (lhs: UserDefaultsSnapshot, rhs: UserDefaultsSnapshot) -> Bool {
     lhs === rhs
@@ -21,17 +21,17 @@ public final class UserDefaultsSnapshot<Schema: UserDefaultsObject> {
     ObjectIdentifier(self).hash(into: &hasher)
   }
 
-  public let wrapped: Schema
+  public let wrapped: Storage
 
-  init(wrapped: Schema) {
+  init(wrapped: Storage) {
     self.wrapped = wrapped
   }
 
-  public subscript <T>(dynamicMember keyPath: KeyPath<Schema, T>) -> T {
+  public subscript <T>(dynamicMember keyPath: KeyPath<Storage, T>) -> T {
     wrapped[keyPath: keyPath]
   }
 
-  public subscript <T>(dynamicMember keyPath: KeyPath<Schema, T?>) -> T? {
+  public subscript <T>(dynamicMember keyPath: KeyPath<Storage, T?>) -> T? {
     wrapped[keyPath: keyPath]
   }
 
