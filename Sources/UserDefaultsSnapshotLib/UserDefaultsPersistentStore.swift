@@ -10,7 +10,7 @@
 
 import Foundation
 
-public final class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaultsPersistentStoreBase {
+open class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaultsPersistentStoreBase {
 
   public let userDefaults: UserDefaults
 
@@ -28,7 +28,14 @@ public final class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: User
     }
   }
 
-  public func makeSnapshot() -> UserDefaultsSnapshot<Schema> {
+  public func removeAllValues() {
+    lock.lock(); defer { lock.unlock() }
+    userDefaults.dictionaryRepresentation().forEach { key, _ in
+      userDefaults.removeObject(forKey: key)
+    }
+  }
+
+  public final func makeSnapshot() -> UserDefaultsSnapshot<Schema> {
     lock.lock(); defer { lock.unlock() }
     return .init(
       wrapped: Schema.init(
@@ -37,7 +44,7 @@ public final class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: User
     )
   }
 
-  public func write(write: (Schema) throws -> Void) rethrows {
+  public final func write(write: (Schema) throws -> Void) rethrows {
     lock.lock(); defer { lock.unlock() }
     let object = Schema(snapshot: userDefaults.dictionaryRepresentation())
     do {
@@ -48,7 +55,7 @@ public final class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: User
     }
   }
 
-  public func sinkSnapshot(_ sink: @escaping (UserDefaultsSnapshot<Schema>) -> Void) -> UserDefaultsPersistentStoreSinkCancellable {
+  public final func sinkSnapshot(_ sink: @escaping (UserDefaultsSnapshot<Schema>) -> Void) -> UserDefaultsPersistentStoreSinkCancellable {
 
     let token = UserDefaultsPersistentStoreSinkCancellable(owner: self)
 

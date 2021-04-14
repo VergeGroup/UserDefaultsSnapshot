@@ -10,7 +10,7 @@
 
 import Foundation
 
-public class UserDefaultsPersistentStoreBase {
+open class UserDefaultsPersistentStoreBase {
 
   internal var subscribers: [UserDefaultsPersistentStoreSinkCancellable : () -> Void] = [:]
 
