@@ -68,7 +68,7 @@ Same as writing, thanks to creating a schema, we can read the value with type-sa
 ```swift
 let snaphot: UserDefaultsSnapshot<MyDefaults> = persistentStore.makeSnapshot()
 
-XCTAssertEqual(store.makeSnapshot().name, "John") // ✅
+XCTAssertEqual(snaphot.name, "John") // ✅
 ```
 
 ### Subscribing the snapshot each UserDefaults updates
@@ -77,7 +77,7 @@ XCTAssertEqual(store.makeSnapshot().name, "John") // ✅
 With this, it provides `sinkSnapshot` method.
 
 ```swift
-let token = store.sinkSnapshot { snapshot in
+let token = persistentStore.sinkSnapshot { snapshot in
   // Receives initial snapshot and every time UserDefaults updated.
 }
 ```
