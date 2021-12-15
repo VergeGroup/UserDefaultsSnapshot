@@ -105,7 +105,7 @@ let persistentStore: UserDefaultsPersistentStore<MyDefaults>
 
 let store: MyStore<MyState, Never> = .init(initialState: .init(defaults: persistentStore.makeSnapshot())
 
-let token = store.sinkSnapshot { [weak store] snapshot in
+let token = persistentStore.sinkSnapshot { [weak store] snapshot in
   // ✅ Updates a snapshot every updates.
   store?.commit {
     $0.defaults = snapshot
