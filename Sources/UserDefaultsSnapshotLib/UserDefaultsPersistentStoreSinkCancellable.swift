@@ -10,7 +10,7 @@
 
 import Foundation
 
-public final class UserDefaultsPersistentStoreSinkCancellable: Hashable {
+public final class UserDefaultsPersistentStoreSinkCancellable: Hashable, @unchecked Sendable {
 
   public static func == (lhs: UserDefaultsPersistentStoreSinkCancellable, rhs: UserDefaultsPersistentStoreSinkCancellable) -> Bool {
     lhs === rhs

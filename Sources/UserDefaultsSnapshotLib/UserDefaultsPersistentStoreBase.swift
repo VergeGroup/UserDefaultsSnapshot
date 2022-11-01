@@ -10,7 +10,7 @@
 
 import Foundation
 
-open class UserDefaultsPersistentStoreBase {
+open class UserDefaultsPersistentStoreBase: @unchecked Sendable {
 
   internal var subscribers: [UserDefaultsPersistentStoreSinkCancellable : () -> Void] = [:]
 
