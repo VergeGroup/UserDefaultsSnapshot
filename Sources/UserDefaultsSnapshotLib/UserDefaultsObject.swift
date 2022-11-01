@@ -10,7 +10,7 @@
 
 import Foundation
 
-open class UserDefaultsObject: Hashable {
+open class UserDefaultsObject: Hashable, @unchecked Sendable {
 
   public static func == (lhs: UserDefaultsObject, rhs: UserDefaultsObject) -> Bool {
     lhs === rhs
@@ -33,6 +33,7 @@ open class UserDefaultsObject: Hashable {
     return (modified[key] as? T) ?? (storage[key] as? T)
   }
 
+  /// non-atomic
   public func write<T: _UserDefaultsPrimitiveValueType>(value: T?, for key: String) {
     guard let value = value else {
       modified[key] = NSNull()

@@ -11,7 +11,7 @@
 import Foundation
 
 @dynamicMemberLookup
-public final class UserDefaultsSnapshot<Storage: UserDefaultsObject>: Hashable {
+public final class UserDefaultsSnapshot<Storage: UserDefaultsObject>: Hashable, Sendable {
 
   public static func == (lhs: UserDefaultsSnapshot, rhs: UserDefaultsSnapshot) -> Bool {
     lhs === rhs

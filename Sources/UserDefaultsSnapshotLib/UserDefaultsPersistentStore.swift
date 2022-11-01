@@ -10,7 +10,7 @@
 
 import Foundation
 
-open class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaultsPersistentStoreBase {
+open class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaultsPersistentStoreBase, @unchecked Sendable {
 
   public let userDefaults: UserDefaults
 
