@@ -81,12 +81,21 @@ final class UserDefaultsBackingTests: XCTestCase {
     withExtendedLifetime(token) {}
   }
 
-  func testSinkUpdate() {
+  func testSinkUpdate() async {
+
+    actor Storage {
+      var results: [Int] = []
+      var snapshots: [UserDefaultsSnapshot<UserDefaultsBackingTests.MyDefaults>] = []
+
+      func perform(_ closure: @escaping (isolated Storage) -> ()) {
+        closure(self)
+      }
+    }
+
     let exp = expectation(description: "wait")
     exp.expectedFulfillmentCount = 3
 
-    var results: [Int] = []
-    var snapshots: [UserDefaultsSnapshot<UserDefaultsBackingTests.MyDefaults>] = []
+    let storage = Storage()
 
     let store = UserDefaultsPersistentStore<MyDefaults>(
       userDefaults: UserDefaults
@@ -96,9 +105,15 @@ final class UserDefaultsBackingTests: XCTestCase {
     // Start:
 
     let token = store.sinkSnapshot { snap in
-      results.append(snap.count)
-      snapshots.append(snap)
-      exp.fulfill()
+
+      Task {
+        await storage.perform {
+          $0.results.append(snap.count)
+          $0.snapshots.append(snap)
+        }
+        exp.fulfill()
+      }
+
     }
 
     store.write { d in
@@ -111,10 +126,15 @@ final class UserDefaultsBackingTests: XCTestCase {
 
     wait(for: [exp], timeout: 1)
 
-    XCTAssertEqual(results, [0, 1, 2])
+    let _results = await storage.results
+    let _snapshots = await storage.snapshots
 
-    XCTAssertEqual(snapshots.map { $0.count }, [0, 1, 2])
+    XCTAssertEqual(_results, [0, 1, 2])
+
+    XCTAssertEqual(_snapshots.map { $0.count }, [0, 1, 2])
 
     withExtendedLifetime(token) {}
   }
 }
+
+
