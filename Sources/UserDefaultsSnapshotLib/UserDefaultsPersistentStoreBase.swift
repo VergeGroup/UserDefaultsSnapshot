@@ -16,7 +16,6 @@ open class UserDefaultsPersistentStoreBase: @unchecked Sendable {
 
   private let lock = NSLock()
 
-  @discardableResult
   public func add(_ eventReceiver: @escaping () -> Void) -> UserDefaultsPersistentStoreSinkCancellable {
     let token = UserDefaultsPersistentStoreSinkCancellable(owner: self)
     lock.lock()
