@@ -55,11 +55,10 @@ open class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaults
     }
   }
 
-  public final func sinkSnapshot(_ sink: @escaping (UserDefaultsSnapshot<Schema>) -> Void) -> UserDefaultsPersistentStoreSinkCancellable {
+  public final func sinkSnapshot(_ sink: @escaping @Sendable (UserDefaultsSnapshot<Schema>) -> Void) -> UserDefaultsPersistentStoreSinkCancellable {
 
-    let token = UserDefaultsPersistentStoreSinkCancellable(owner: self)
-
-    initial: do {
+    // deliver initial
+    do {
       let snapshot = makeSnapshot()
 
       sink(
@@ -67,19 +66,50 @@ open class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaults
       )
     }
 
-    add { [weak self] in
+    return add { [weak self] in
       guard let self = self else { return }
 
       let snapshot = self.makeSnapshot()
 
-      DispatchQueue.main.async {
+      sink(
+        snapshot
+      )
+    }
+
+  }
+
+  public final func sinkSnapshotOnMain(_ sink: @escaping @MainActor (UserDefaultsSnapshot<Schema>) -> Void) -> UserDefaultsPersistentStoreSinkCancellable {
+
+    // deliver initial
+    do {
+      let snapshot = makeSnapshot()
+
+      if Thread.isMainThread {
+        MainActor.assumeIsolated {
+          sink(
+            snapshot
+          )
+        }
+      } else {
+        Task { @MainActor in
+          sink(
+            snapshot
+          )
+        }
+      }
+    }
+
+    return add { [weak self] in
+      guard let self = self else { return }
+
+      let snapshot = self.makeSnapshot()
+
+      Task { @MainActor in
         sink(
           snapshot
         )
       }
     }
-
-    return token
 
   }
 
