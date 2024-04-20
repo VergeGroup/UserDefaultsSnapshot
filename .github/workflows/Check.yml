@@ -4,29 +4,29 @@ on: [push]
 
 jobs:
   swiftpm-build:
-    runs-on: macOS-12
+    runs-on: macOS-14
     steps:
       - uses: maxim-lobanov/setup-xcode@v1.1
         with:
-          xcode-version: "14.0"
+          xcode-version: "15.3"
       - uses: actions/checkout@v2
       - name: Build
         run: swift build -v
   swiftpm-test:
-    runs-on: macOS-12
+    runs-on: macOS-14
     steps:
       - uses: maxim-lobanov/setup-xcode@v1.1
         with:
-          xcode-version: "14.0"
+          xcode-version: "15.3"
       - uses: actions/checkout@v2
       - name: Test
         run: swift test
   cocoapods:
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - uses: maxim-lobanov/setup-xcode@v1.1
         with:
-          xcode-version: "14.0"
+          xcode-version: "15.3"
       - uses: actions/checkout@v2
       - name: Lint Cocoapods
         run: pod lib lint --allow-warnings
