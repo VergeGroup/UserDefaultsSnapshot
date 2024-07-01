@@ -44,7 +44,7 @@ open class UserDefaultsPersistentStore<Schema: UserDefaultsObject>: UserDefaults
     )
   }
 
-  public final func write(write: (Schema) throws -> Void) rethrows {
+  public final func write(write: (borrowing Schema) throws -> Void) rethrows {
     lock.lock(); defer { lock.unlock() }
     let object = Schema(snapshot: userDefaults.dictionaryRepresentation())
     do {
