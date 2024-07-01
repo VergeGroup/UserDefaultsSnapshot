@@ -3,13 +3,6 @@
 This library enables us to create a snapshot of the values which UserDefaults manages.  
 The snapshot means an immutable data model, that could be super effective to embed into the state of state-management.
 
-<p>
-<img alt="swift5.3" src="https://img.shields.io/badge/swift-5.3-ED523F.svg?style=flat"/>
-<img alt="Tests" src="https://github.com/VergeGroup/UserDefaultsSnapshot/workflows/Swift/badge.svg"/>
-<img alt="cocoapods" src="https://img.shields.io/cocoapods/v/UserDefaultsSnapshotLib" />
-</p>
-
-
 ## Overview
 
 ### Creates a schema of the snapshot from UserDefaults
