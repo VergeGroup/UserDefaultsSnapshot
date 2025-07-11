@@ -14,7 +14,6 @@ struct ISO8601Date: UserDefaultValueType, Equatable {
   }
 
   func toPrimitiveValue() -> String {
-    print("toPrimitiveValue=\(ISO8601DateFormatter().string(from: date))")
     return ISO8601DateFormatter().string(from: date)
   }
 }
