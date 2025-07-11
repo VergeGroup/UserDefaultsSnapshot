@@ -29,17 +29,18 @@ open class UserDefaultsObject: Hashable, @unchecked Sendable {
     self.storage = snapshot
   }
 
-  public func read<T: _UserDefaultsPrimitiveValueType>(type: T.Type? = nil, from key: String) -> T? {
-    return (modified[key] as? T) ?? (storage[key] as? T)
+  public func read<T: UserDefaultValueType>(type: T.Type? = nil, from key: String) -> T? {
+    return (modified[key] as? T.PrimitiveValue).flatMap(T.fromPrimitiveValue(_:))
+    ?? (storage[key] as? T.PrimitiveValue).flatMap(T.fromPrimitiveValue(_:))
   }
 
   /// non-atomic
-  public func write<T: _UserDefaultsPrimitiveValueType>(value: T?, for key: String) {
+  public func write<T: UserDefaultValueType>(value: T?, for key: String) {
     guard let value = value else {
       modified[key] = NSNull()
       return
     }
-    modified[key] = value
+    modified[key] = value.toPrimitiveValue()
   }
 
 }
@@ -47,7 +48,7 @@ open class UserDefaultsObject: Hashable, @unchecked Sendable {
 extension UserDefaultsObject {
 
   @propertyWrapper
-  public struct OptionalProperty<WrappedValue: _UserDefaultsPrimitiveValueType> {
+  public struct OptionalProperty<WrappedValue: UserDefaultValueType> {
 
     @available(*, unavailable)
     public var wrappedValue: WrappedValue? {
@@ -79,7 +80,7 @@ extension UserDefaultsObject {
   }
 
   @propertyWrapper
-  public struct Property<WrappedValue: _UserDefaultsPrimitiveValueType> {
+  public struct Property<WrappedValue: UserDefaultValueType> {
 
     @available(*, unavailable)
     public var wrappedValue: WrappedValue {
